@@ -45,4 +45,36 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+
+    public function createdOperators()
+    {
+        return $this->hasMany(Operator::class, 'created_by');
+    }
+
+    public function updatedOperators()
+    {
+        return $this->hasMany(Operator::class, 'updated_by');
+    }
+
+    public function createdAircrafts()
+    {
+        return $this->hasMany(Aircraft::class, 'created_by');
+    }
+
+    public function updatedAircrafts()
+    {
+        return $this->hasMany(Aircraft::class, 'updated_by');
+    }
+
+    public function createdAircraftTypes()
+    {
+        return $this->hasMany(AircraftType::class, 'created_by');
+    }
+
+    public function updatedAircraftTypes()
+    {
+        return $this->hasMany(AircraftType::class, 'updated_by');
+    }
+
 }
