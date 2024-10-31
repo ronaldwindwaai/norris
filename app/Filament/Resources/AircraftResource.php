@@ -35,26 +35,54 @@ class AircraftResource extends Resource
     public static function form(Form $form): Form
     {
         return $form->schema([
-            Forms\Components\TextInput::make('registration')
+            Forms\Components\TextInput::make('aircraft_registration')
                 ->label('Aircraft Registration')
                 ->required()
                 ->maxLength(50),
                 
-            Forms\Components\Select::make('aircraft_type_id')
+                Forms\Components\Select::make('aircraft_type_id')
                 ->label('Aircraft Type')
-                ->options(AircraftType::all()->pluck('type', 'id')->filter(function ($label) {
-                    return !is_null($label);
-                }))
+                ->relationship('aircraftType', 'type')
                 ->searchable()
-                ->required(),
-                
+                ->required()
+                ->createOptionForm([
+                    TextInput::make('type')
+                        ->label('Aircraft Type')
+                        ->required()
+                        ->maxLength(100),
+                    TextInput::make('description')
+                        ->label('Description')
+                        ->maxLength(255),
+                ])
+                ->createOptionUsing(function ($data, $set) {
+                    $newAircraftType = AircraftType::create($data);
+                    $set('aircraft_type_id', $newAircraftType->id); // Set the field to the ID of the newly created AircraftType
+                    return $newAircraftType->id;
+                }),
+              
             Forms\Components\Select::make('operator_id')
                 ->label('Operator Name')
-                ->options(Operator::all()->pluck('name', 'id')->filter(function ($label) {
-                    return !is_null($label);
-                }))
+                ->relationship('operator', 'name')
                 ->searchable()
-                ->required(),
+                ->required()
+                ->createOptionForm([
+                    TextInput::make('name')
+                        ->label('Operator Name')
+                        ->required()
+                        ->maxLength(100),
+                    TextInput::make('operator_tel')
+                        ->label('Operator Telephone')
+                        ->maxLength(15),
+                    TextInput::make('operator_email')
+                        ->label('Operator Email')
+                        ->email()
+                        ->maxLength(100),
+                ])
+                ->createOptionUsing(function ($data, $set) {
+                    $operator = Operator::create($data);
+                    $set('operator_id', $operator->id); // Set the field to the ID of the newly created AircraftType
+                    return $operator->id;
+                }),          
                 
             Forms\Components\TextInput::make('elt_code')
                 ->label('ELT Serial Number')

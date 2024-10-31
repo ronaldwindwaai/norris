@@ -11,6 +11,7 @@ class Operator extends Model
 {
     use HasFactory;
     protected $fillable = [
+        'name',
         'operator_id',
         'operator_tel',
         'operator_mobile',
