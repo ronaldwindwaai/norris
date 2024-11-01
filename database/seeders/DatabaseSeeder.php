@@ -24,7 +24,8 @@ class DatabaseSeeder extends Seeder
         User::factory()->create([
             'name' => 'Ronald Windwaai',
             'email' => 'ronaldwindwaai@gmail.com',
-            'password'=>Hash::make('MfundoMtselu')
+            'password'=>Hash::make('MfundoMtselu'),
+            'is_admin' => true, // Default to non-admin
         ]);
 
         // Create 5 aircraft types
